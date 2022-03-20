@@ -3,34 +3,19 @@ import ReactDOM from "react-dom";
 import "./app/layout/styles.css";
 import App from "./app/layout/App";
 import reportWebVitals from "./reportWebVitals";
-//import { BrowserRouter } from "react-router-dom";
-import { unstable_HistoryRouter as HistoryRouter } from "react-router-dom";
 import { createBrowserHistory } from "history";
+import { Router } from "react-router-dom";
 
 export const history = createBrowserHistory();
 
 ReactDOM.render(
 	<React.StrictMode>
-		<HistoryRouter history={history}>
+		<Router history={history}>
 			<App />
-		</HistoryRouter>
+		</Router>
 	</React.StrictMode>,
 	document.getElementById("root")
 );
-
-/* ----- Previous -----
-
-ReactDOM.render(
-	<React.StrictMode>
-		<BrowserRouter>
-			<App />
-		</BrowserRouter>
-	</React.StrictMode>,
-	document.getElementById("root")
-);
-
------ End Previous -----
-*/
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
@@ -39,6 +24,8 @@ ReactDOM.render(
 reportWebVitals();
 
 /* ----- Code Sample -----
+
+//Experimented with v6 but it lacks support for middleware routing that v5 has:
 
 import { unstable_HistoryRouter as HistoryRouter } from 'react-router-dom';
 import { createBrowserHistory } from "history";
