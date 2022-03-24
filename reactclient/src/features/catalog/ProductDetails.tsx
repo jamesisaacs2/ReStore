@@ -14,6 +14,7 @@ import agent from "../../app/api/agent";
 import NotFound from "../../app/errors/NotFound";
 import LoadingComponent from "../../app/layout/LoadingComponent";
 import { Product } from "../../app/models/product";
+import { currencyFormat } from "../../app/util/util";
 
 export default function ProductDetails() {
 	const { id } = useParams<{ id: string }>();
@@ -34,17 +35,13 @@ export default function ProductDetails() {
 	return (
 		<Grid container spacing={6}>
 			<Grid item xs={6}>
-				<img
-					src={product.pictureUrl}
-					alt={product.name}
-					style={{ width: "100%" }}
-				/>
+				<img src={product.pictureUrl} alt={product.name} style={{ width: "100%" }} />
 			</Grid>
 			<Grid item xs={6}>
 				<Typography variant="h3">{product.name}</Typography>
 				<Divider sx={{ mb: 2 }} />
 				<Typography variant="h4" color="secondary">
-					$ {(product.price / 100).toFixed(2)}
+					{currencyFormat(product.price)}
 				</Typography>
 				<TableContainer>
 					<Table>
