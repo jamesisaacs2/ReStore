@@ -2,8 +2,8 @@ import { Add, Delete, Remove } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import {
 	Box,
+	Button,
 	Grid,
-	IconButton,
 	Paper,
 	Table,
 	TableBody,
@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import { green } from "@mui/material/colors";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import agent from "../../app/api/agent";
 import { useStoreContext } from "../../app/context/StoreContext";
 import { currencyFormat } from "../../app/util/util";
@@ -129,17 +130,26 @@ export default function BasketPage() {
 				</Table>
 			</TableContainer>
 			<Grid container>
-				<Grid item xs={5.05} />
-				<Grid item xs={5.28}>
+				<Grid item xs={5} />
+				<Grid item xs={5.22}>
 					<BasketSummary />
+					<Button
+						component={Link}
+						to="/checkout"
+						size="large"
+						variant="contained"
+						fullWidth={true}
+					>
+						Checkout
+					</Button>
 				</Grid>
-				<Grid item xs={1.67} />
+				<Grid item xs={1.78} />
 			</Grid>
 		</>
 	);
 }
 
-/*
+/*	
 ----- V1 -----
 
 const [loading, setLoading] = useState(true);
