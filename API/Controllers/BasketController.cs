@@ -28,9 +28,7 @@ namespace API.Controllers
          return MapBasketDto(basket);
       }
 
-
-
-      [HttpPost] // uses query string, ex:  api/basket?productId=3&quantity=2
+      [HttpPost]
       public async Task<ActionResult<BasketDto>> AddItemToBasket(int productId, int quantity)
       {
          //get basket 
@@ -42,7 +40,7 @@ namespace API.Controllers
          //get product
          var product = await _context.Products.FindAsync(productId);
 
-         if (product == null) return NotFound();
+         if (product == null) return BadRequest(new ProblemDetails { Title = "Product Not Found" });
 
          //add item
          basket.AddItem(product, quantity);
