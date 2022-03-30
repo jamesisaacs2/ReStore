@@ -12,7 +12,7 @@ namespace API.RequestHelpers
       {
          MetaData = new MetaData
          {
-            TotalItemCount = count,
+            TotalCount = count,
             PageSize = pageSize,
             CurrentPage = pageNumber,
             TotalPages = (int)Math.Ceiling(count / (double)pageSize)
