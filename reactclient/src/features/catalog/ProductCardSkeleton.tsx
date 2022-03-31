@@ -1,4 +1,4 @@
-import { Card, CardActions, CardContent, CardHeader, Grid, Skeleton } from "@mui/material";
+import { Card, CardContent, CardHeader, Grid, Skeleton } from "@mui/material";
 
 export default function ProductCardSkeleton() {
 	return (
@@ -6,22 +6,21 @@ export default function ProductCardSkeleton() {
 			<CardHeader
 				avatar={<Skeleton animation="wave" variant="circular" width={40} height={40} />}
 				title={
-					<Skeleton animation="wave" height={10} width="80%" style={{ marginBottom: 6 }} />
+					<Skeleton animation="wave" height={15} width="70%" style={{ marginBottom: 6 }} />
 				}
 			/>
-			<Skeleton sx={{ height: 190 }} animation="wave" variant="rectangular" />
+			<Skeleton sx={{ height: 140 }} animation="wave" variant="rectangular" />
 			<CardContent>
 				<>
-					<Skeleton animation="wave" height={10} style={{ marginBottom: 6 }} />
-					<Skeleton animation="wave" height={10} width="80%" />
+					<Skeleton animation="wave" height={25} width="35%" style={{ marginBottom: 9 }} />
+					<Skeleton animation="wave" height={15} width="45%" />
 				</>
 			</CardContent>
-			<CardActions>
+			<CardContent>
 				<>
-					<Skeleton animation="wave" height={10} width="40%" />
-					<Skeleton animation="wave" height={10} width="20%" />
+					<Skeleton animation="wave" height={15} width="60%" />
 				</>
-			</CardActions>
+			</CardContent>
 		</Grid>
 	);
 }
