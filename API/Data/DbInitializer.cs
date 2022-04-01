@@ -29,7 +29,7 @@ namespace API.Data
                Email = "admin@test.com"
             };
 
-            await userManager.CreateAsync(testAdmin, "PA$$WORD-cd27cc8ani-7478");
+            await userManager.CreateAsync(testAdmin, "PA$$WORD-cd27cc8ani-5782");
             await userManager.AddToRolesAsync(testAdmin, new[] { "Member", "Admin" });
          }
 
