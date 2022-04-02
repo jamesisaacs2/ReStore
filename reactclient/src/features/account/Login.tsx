@@ -5,12 +5,13 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { Grid, Paper, TextField, Typography } from "@mui/material";
 import { FieldValues, useForm } from "react-hook-form";
 import { LoadingButton } from "@mui/lab";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import { useAppDispatch } from "../../app/store/configureStore";
 import { signinUser } from "./accountSlice";
 
 export default function Login() {
 	const history = useHistory();
+	const location = useLocation<any>();
 	const dispatch = useAppDispatch();
 	const {
 		register,
@@ -21,8 +22,12 @@ export default function Login() {
 	});
 
 	async function submitForm(data: FieldValues) {
-		await dispatch(signinUser(data));
-		history.push("/catalog");
+		try {
+			await dispatch(signinUser(data));
+			history.push(location.state?.from?.pathname || "/catalog");
+		} catch (error) {
+			console.log(error);
+		}
 	}
 
 	return (
