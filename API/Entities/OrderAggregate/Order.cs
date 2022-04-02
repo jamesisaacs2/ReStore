@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Entities.OrderAggregate
 {
-   [Owned]
    public class Order
    {
       public int Id { get; set; }
