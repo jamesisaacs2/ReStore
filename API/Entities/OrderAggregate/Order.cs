@@ -20,7 +20,5 @@ namespace API.Entities.OrderAggregate
       {
          return Subtotal + DeliveryFee;
       }
-
-
    }
 }

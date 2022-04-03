@@ -104,7 +104,7 @@ namespace API
          {
             //app.UseDeveloperExceptionPage();//replaced by ExceptionMiddleware page
             app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPIv5 v1"));
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPIv5 v1.07"));
          }
 
          //app.UseHttpsRedirection();
