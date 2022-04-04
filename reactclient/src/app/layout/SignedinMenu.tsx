@@ -1,5 +1,6 @@
 import { Button, Menu, Fade, MenuItem } from "@mui/material";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { signout } from "../../features/account/accountSlice";
 import { clearBasket } from "../../features/basket/basketSlice";
 import { useAppDispatch, useAppSelector } from "../store/configureStore";
@@ -26,10 +27,15 @@ export default function SignedinMenu() {
 				{user?.email}
 			</Button>
 			<Menu anchorEl={anchorEl} open={open} onClose={handleClose} TransitionComponent={Fade}>
-				<MenuItem onClick={handleClose} sx={{ typography: "h8" }}>
+				<MenuItem onClick={handleClose} sx={{ typography: "body2" }}>
 					Profile
 				</MenuItem>
-				<MenuItem onClick={handleClose} sx={{ typography: "h8" }}>
+				<MenuItem
+					component={Link}
+					to="/orders"
+					onClick={handleClose}
+					sx={{ typography: "body2" }}
+				>
 					My orders
 				</MenuItem>
 				<MenuItem
@@ -37,7 +43,7 @@ export default function SignedinMenu() {
 						dispatch(signout());
 						dispatch(clearBasket());
 					}}
-					sx={{ typography: "h8" }}
+					sx={{ typography: "body2" }}
 				>
 					Logout
 				</MenuItem>
