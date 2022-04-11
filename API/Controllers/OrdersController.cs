@@ -54,21 +54,18 @@ namespace API.Controllers
          foreach (var item in basket.Items)
          {
             var productItem = await _context.Products.FindAsync(item.ProductId);
-
             var itemOrdered = new ProductItemOrdered
             {
                ProductId = productItem.Id,
                Name = productItem.Name,
                PictureUrl = productItem.PictureUrl,
             };
-
             var orderItem = new OrderItem
             {
                ItemOrdered = itemOrdered,
                Price = productItem.Price,
                Quantity = item.Quantity
             };
-
             items.Add(orderItem);
             productItem.QuantityInStock -= item.Quantity;
          }
@@ -95,7 +92,7 @@ namespace API.Controllers
                .Include(a => a.Address)
                .FirstOrDefaultAsync(x => x.UserName == User.Identity.Name);
 
-            var address = new UserAddress
+            user.Address = new UserAddress //*** ? var address =
             {
                FullName = orderDto.ShippingAddress.FullName,
                Address1 = orderDto.ShippingAddress.Address1,
@@ -105,7 +102,7 @@ namespace API.Controllers
                Zip = orderDto.ShippingAddress.Zip,
                Country = orderDto.ShippingAddress.Country,
             };
-            user.Address = address; //*
+            _context.Update(user); //*** ? user.Address = address
          }
 
          var result = await _context.SaveChangesAsync() > 0;

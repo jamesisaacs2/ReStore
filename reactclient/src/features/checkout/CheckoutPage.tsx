@@ -1,4 +1,12 @@
-import { Box, Button, Paper, Step, StepLabel, Stepper, Typography } from "@mui/material";
+import {
+	Box,
+	Button,
+	Paper,
+	Step,
+	StepLabel,
+	Stepper,
+	Typography,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import { FieldValues, FormProvider, useForm } from "react-hook-form";
 import AddressForm from "./AddressForm";
@@ -51,7 +59,12 @@ export default function CheckoutPage() {
 			case 1:
 				return <Review />;
 			case 2:
-				return <PaymentForm cardState={cardState} onCardInputChange={onCardInputChange} />;
+				return (
+					<PaymentForm
+						cardState={cardState}
+						onCardInputChange={onCardInputChange}
+					/>
+				);
 			default:
 				throw new Error("Unknown step");
 		}
@@ -87,8 +100,11 @@ export default function CheckoutPage() {
 				},
 			});
 			console.log("paymentResult: ", paymentResult);
-			if (paymentResult.paymentIntent?.status == "succeeded") {
-				const orderNumber = await agent.Orders.create({ saveAddress, shippingAddress });
+			if (paymentResult.paymentIntent?.status === "succeeded") {
+				const orderNumber = await agent.Orders.create({
+					saveAddress,
+					shippingAddress,
+				});
 				setOrderNumber(orderNumber);
 				setPaymentSuccess(true);
 				setPaymentMessage("We have received payment - Thank you!");
@@ -155,15 +171,23 @@ export default function CheckoutPage() {
 								{paymentSuccess ? (
 									<>
 										<Box mt={5} ml={3}>
-											<Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
+											<Typography
+												variant="subtitle1"
+												sx={{ fontWeight: "bold" }}
+											>
 												Your order number is #10-3103-{orderNumber}.
 											</Typography>
 										</Box>
 										<Box mt={5} ml={3}>
-											<Typography variant="subtitle1" sx={{ fontStyle: "italic" }}>
-												* Please note that we have not emailed an order confirmation,
+											<Typography
+												variant="subtitle1"
+												sx={{ fontStyle: "italic" }}
+											>
+												* Please note that we have not emailed an order
+												confirmation,
 												<br />
-												and will not be sending you any updates, such as when an
+												and will not be sending you any updates, such as
+												when an
 												<br />
 												order has shipped, as this is not a live store.
 											</Typography>
