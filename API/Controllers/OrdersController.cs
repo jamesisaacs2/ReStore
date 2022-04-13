@@ -92,7 +92,7 @@ namespace API.Controllers
                .Include(a => a.Address)
                .FirstOrDefaultAsync(x => x.UserName == User.Identity.Name);
 
-            user.Address = new UserAddress //*** ? var address =
+            var address = new UserAddress
             {
                FullName = orderDto.ShippingAddress.FullName,
                Address1 = orderDto.ShippingAddress.Address1,
@@ -102,14 +102,14 @@ namespace API.Controllers
                Zip = orderDto.ShippingAddress.Zip,
                Country = orderDto.ShippingAddress.Country,
             };
-            _context.Update(user); //*** ? user.Address = address
+            user.Address = address;
          }
 
          var result = await _context.SaveChangesAsync() > 0;
 
          if (result) return CreatedAtRoute("GetOrder", new { id = order.Id }, order.Id);
 
-         return BadRequest("Problem creating order");
+         return BadRequest(new ProblemDetails { Title = "Problem creating order" });
       }
    }
 }

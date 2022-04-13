@@ -66,15 +66,17 @@ export const basketSlice = createSlice({
 	},
 	extraReducers: (builder) => {
 		builder.addCase(addBasketItemAsync.pending, (state, action) => {
-			state.status = "pendingAddBasketItemAsync" + action.meta.arg.productId;
+			state.status = "pendingAddItem" + action.meta.arg.productId;
 		});
 		builder.addCase(removeBasketItemAsync.pending, (state, action) => {
 			state.status =
-				"pendingRemoveBasketItemAsync" + action.meta.arg.productId + action.meta.arg.name;
+				"pendingRemoveItem" + action.meta.arg.productId + action.meta.arg.name;
 		});
 		builder.addCase(removeBasketItemAsync.fulfilled, (state, action) => {
 			const { productId, quantity } = action.meta.arg;
-			const itemIndex = state.basket?.items.findIndex((i) => i.productId === productId);
+			const itemIndex = state.basket?.items.findIndex(
+				(i) => i.productId === productId
+			);
 			if (itemIndex === -1 || itemIndex === undefined) return;
 			state.basket!.items[itemIndex].quantity -= quantity;
 			if (state.basket?.items[itemIndex].quantity === 0)

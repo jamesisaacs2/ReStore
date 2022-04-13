@@ -35,7 +35,7 @@ namespace API.Controllers
       {
          var basket = await RetrieveBasket(GetBuyerId()); //get basket
 
-         if (basket == null) basket = CreateBasket(); // || create basket
+         if (basket == null) basket = CreateBasket(); //create basket
 
          var product = await _context.Products.FindAsync(productId); //get product
 
@@ -77,7 +77,7 @@ namespace API.Controllers
          return await _context.Baskets
             .Include(i => i.Items)
             .ThenInclude(p => p.Product)
-            .FirstOrDefaultAsync(x => x.BuyerId == Request.Cookies["buyerId"]);
+            .FirstOrDefaultAsync(x => x.BuyerId == buyerId);
       }
 
       private string GetBuyerId()
@@ -91,7 +91,7 @@ namespace API.Controllers
          if (string.IsNullOrEmpty(buyerId))
          {
             buyerId = Guid.NewGuid().ToString();
-            var cookieOptions = new CookieOptions { IsEssential = true, Expires = DateTime.Now.AddDays(60) };
+            var cookieOptions = new CookieOptions { IsEssential = true, Expires = DateTime.Now.AddDays(30) };
             Response.Cookies.Append("buyerId", buyerId, cookieOptions);
          }
 
