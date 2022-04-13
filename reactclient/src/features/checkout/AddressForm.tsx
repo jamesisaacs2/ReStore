@@ -32,11 +32,7 @@ export default function AddressForm() {
 					<AppTextInput control={control} name="city" label="* City" />
 				</Grid>
 				<Grid item xs={12} sm={6}>
-					<AppTextInput
-						control={control}
-						name="state"
-						label="* State / Province or region"
-					/>
+					<AppTextInput control={control} name="state" label="* State or Province" />
 				</Grid>
 				<Grid item xs={12} sm={6}>
 					<AppTextInput control={control} name="zip" label="* Zip / Postal code" />

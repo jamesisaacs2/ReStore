@@ -42,7 +42,7 @@ namespace API.Controllers
          var intent = await _paymentService.CreateOrUpdatePaymentIntent(basket);
 
          if (intent == null) return BadRequest(
-             new ProblemDetails { Title = "Problem creating intent to pay" }
+             new ProblemDetails { Title = "Problem creating payment intent for checkout" }
          );
 
          basket.PaymentIntentId = basket.PaymentIntentId ?? intent.Id;
@@ -53,7 +53,7 @@ namespace API.Controllers
          var result = await _context.SaveChangesAsync() > 0;
 
          if (!result) return BadRequest(
-            new ProblemDetails { Title = "Problem updating basket with intent to pay" }
+            new ProblemDetails { Title = "Problem updating basket with payment intent" }
          );
 
          return basket.MapBasketToDto();
@@ -67,12 +67,12 @@ namespace API.Controllers
          var stripeEvent = EventUtility.ConstructEvent(jsonResp,
             Request.Headers["Stripe-Signature"], _config["StripeSettings:WhSecret"]);
 
-         var chargeObj = (Charge)stripeEvent.Data.Object;
+         var charge = (Charge)stripeEvent.Data.Object;
 
          var order = await _context.Orders.FirstOrDefaultAsync(x =>
-            x.PaymentIntentId == chargeObj.PaymentIntentId);
+            x.PaymentIntentId == charge.PaymentIntentId);
 
-         if (chargeObj.Status == "succeeded") order.OrderStatus = OrderStatus.PaymentReceived;
+         if (charge.Status == "succeeded") order.OrderStatus = OrderStatus.PaymentReceived;
 
          await _context.SaveChangesAsync();
 

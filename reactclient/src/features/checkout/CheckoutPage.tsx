@@ -1,12 +1,4 @@
-import {
-	Box,
-	Button,
-	Paper,
-	Step,
-	StepLabel,
-	Stepper,
-	Typography,
-} from "@mui/material";
+import { Box, Button, Paper, Step, StepLabel, Stepper, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { FieldValues, FormProvider, useForm } from "react-hook-form";
 import AddressForm from "./AddressForm";
@@ -50,6 +42,7 @@ export default function CheckoutPage() {
 				[event.elementType]: event.error?.message,
 			},
 		});
+		setCardComplete({ ...cardComplete, [event.elementType]: event.complete });
 	}
 
 	function getStepContent(step: number) {
@@ -59,12 +52,7 @@ export default function CheckoutPage() {
 			case 1:
 				return <Review />;
 			case 2:
-				return (
-					<PaymentForm
-						cardState={cardState}
-						onCardInputChange={onCardInputChange}
-					/>
-				);
+				return <PaymentForm cardState={cardState} onCardInputChange={onCardInputChange} />;
 			default:
 				throw new Error("Unknown step");
 		}
@@ -88,7 +76,7 @@ export default function CheckoutPage() {
 	async function submitOrder(data: FieldValues) {
 		setLoading(true);
 		const { nameOnCard, saveAddress, ...shippingAddress } = data;
-		if (!stripe || !elements) return; //stripe is not yet ready
+		if (!stripe || !elements) return; //stripe not yet ready
 		try {
 			const cardElement = elements.getElement(CardNumberElement);
 			const paymentResult = await stripe.confirmCardPayment(basket?.clientSecret!, {
@@ -171,24 +159,14 @@ export default function CheckoutPage() {
 								{paymentSuccess ? (
 									<>
 										<Box mt={5} ml={3}>
-											<Typography
-												variant="subtitle1"
-												sx={{ fontWeight: "bold" }}
-											>
+											<Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
 												Your order number is #10-3103-{orderNumber}.
 											</Typography>
 										</Box>
 										<Box mt={5} ml={3}>
-											<Typography
-												variant="subtitle1"
-												sx={{ fontStyle: "italic" }}
-											>
-												* Please note that we have not emailed an order
-												confirmation,
-												<br />
-												and will not be sending you any updates, such as
-												when an
-												<br />
+											<Typography variant="subtitle1" sx={{ fontStyle: "italic" }}>
+												* Please note that we have not emailed an order confirmation,
+												and will not be sending you any updates, such as when an
 												order has shipped, as this is not a live store.
 											</Typography>
 										</Box>
