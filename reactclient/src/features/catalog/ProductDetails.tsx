@@ -65,7 +65,7 @@ export default function ProductDetails() {
 				<Typography variant="h4" color="secondary">
 					{currencyFormat(product.price)}
 				</Typography>
-				<TableContainer>
+				<TableContainer sx={{ pb: 3 }}>
 					<Table>
 						<TableBody>
 							<TableRow>

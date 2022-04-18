@@ -30,6 +30,7 @@ namespace API.Controllers
       public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
       {
          var user = await _userManager.FindByNameAsync(loginDto.Username);
+
          if (user == null || !await _userManager.CheckPasswordAsync(user, loginDto.Password))
             return Unauthorized();
 

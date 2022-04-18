@@ -5,10 +5,6 @@ import { basketSlice } from "../../features/basket/basketSlice";
 import { catalogSlice } from "../../features/catalog/catalogSlice";
 import { counterSlice } from "../../features/contact/counterSlice";
 
-// export function configureStore() {
-// 	return createStore(counterReducer);
-// }
-
 export const store = configureStore({
 	reducer: {
 		counter: counterSlice.reducer,

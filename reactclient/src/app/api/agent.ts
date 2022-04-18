@@ -4,9 +4,9 @@ import { history } from "../..";
 import { PaginatedResponse } from "../models/pagination";
 import { store } from "../store/configureStore";
 
-const delay = () => new Promise((resolve) => setTimeout(resolve, 500));
+const delay = () => new Promise((resolve) => setTimeout(resolve, 400));
 
-axios.defaults.baseURL = "http://localhost:5000/api/";
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 axios.defaults.withCredentials = true;
 
 const responseBody = (response: AxiosResponse) => response.data;
@@ -19,7 +19,7 @@ axios.interceptors.request.use((config) => {
 
 axios.interceptors.response.use(
 	async (response) => {
-		await delay();
+		if (process.env.NODE_ENV === "development") await delay();
 		const pagination = response.headers["pagination"];
 		if (pagination) {
 			response.data = new PaginatedResponse(response.data, JSON.parse(pagination));
@@ -64,8 +64,7 @@ axios.interceptors.response.use(
 );
 
 const requests = {
-	get: (url: string, params?: URLSearchParams) =>
-		axios.get(url, { params }).then(responseBody),
+	get: (url: string, params?: URLSearchParams) => axios.get(url, { params }).then(responseBody),
 	post: (url: string, body: {}) => axios.post(url, body).then(responseBody),
 	put: (url: string, body: {}) => axios.put(url, body).then(responseBody),
 	delete: (url: string) => axios.delete(url).then(responseBody),

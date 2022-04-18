@@ -33,10 +33,12 @@ namespace API
       {
          services.AddControllers();
 
-         services.AddSwaggerGen(gen =>
+         services.AddSwaggerGen(config =>
          {
-            gen.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
-            gen.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            var c = config;
+
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
+            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
                Description = "Jwt auth header",
                Name = "Authorization",
@@ -44,7 +46,8 @@ namespace API
                Type = SecuritySchemeType.ApiKey,
                Scheme = "Bearer"
             });
-            gen.AddSecurityRequirement(new OpenApiSecurityRequirement
+
+            c.AddSecurityRequirement(new OpenApiSecurityRequirement
             {
                {
                   new OpenApiSecurityScheme
@@ -105,17 +108,20 @@ namespace API
          {
             //app.UseDeveloperExceptionPage();//replaced by ExceptionMiddleware page
             app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPIv5 v1.07"));
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1.07"));
          }
 
          //app.UseHttpsRedirection();
 
          app.UseRouting();
 
+         app.UseDefaultFiles();
+         app.UseStaticFiles();
+
          //CORS must go here:
          app.UseCors(opt =>
          {
-            opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:3000", "http://localhost:3001");
+            opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:3000");
          });
 
          app.UseAuthentication();
@@ -124,6 +130,7 @@ namespace API
          app.UseEndpoints(endpoints =>
          {
             endpoints.MapControllers();
+            endpoints.MapFallbackToController("Index", "Fallback");
          });
       }
    }
