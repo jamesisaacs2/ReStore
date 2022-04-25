@@ -53,7 +53,10 @@ export default function ProductCard({ product }: Props) {
 					{product.brand} / {product.type}
 				</Typography>
 			</CardContent>
-			<CardActions>
+			<CardActions sx={{ justifyContent: "space-between" }}>
+				<Button component={Link} to={`/catalog/${product.id}`} size="small">
+					View
+				</Button>
 				<LoadingButton
 					loading={status.includes("pendingAddItem" + product.id)}
 					onClick={() => dispatch(addBasketItemAsync({ productId: product.id }))}
@@ -61,9 +64,6 @@ export default function ProductCard({ product }: Props) {
 				>
 					Add to cart
 				</LoadingButton>
-				<Button component={Link} to={`/catalog/${product.id}`} size="small">
-					View
-				</Button>
 			</CardActions>
 		</Card>
 	);
