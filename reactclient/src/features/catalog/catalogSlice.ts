@@ -36,7 +36,7 @@ export const fetchProductsAsync = createAsyncThunk<Product[], void, { state: Roo
 			thunkAPI.dispatch(setMetaData(response.metaData));
 			return response.items;
 		} catch (error: any) {
-			console.log("fetchProduct-s-Async", error);
+			console.log("fetchProductsAsync", error);
 			return thunkAPI.rejectWithValue({ error: error.data });
 		}
 	}
