@@ -60,20 +60,32 @@ export const accountSlice = createSlice({
 			history.push("/");
 		},
 		setUser: (state, action) => {
-			state.user = action.payload;
+			let claim = JSON.parse(atob(action.payload.token.split(".")[1]));
+			let roles =
+				claim["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+			state.user = {
+				...action.payload,
+				roles: typeof roles === "string" ? [roles] : roles,
+			};
 		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(fetchCurrentUser.rejected, (state) => {
 			state.user = null;
 			localStorage.removeItem("user");
-			toast.error("So sad, your session has expired.  Please log in again");
+			toast.error("Your session has expired, so sad.  Please log in again");
 			history.push("/");
 		});
 		builder.addMatcher(
 			isAnyOf(signinUser.fulfilled, fetchCurrentUser.fulfilled),
 			(state, action) => {
-				state.user = action.payload;
+				let claim = JSON.parse(atob(action.payload.token.split(".")[1]));
+				let roles =
+					claim["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+				state.user = {
+					...action.payload,
+					roles: typeof roles === "string" ? [roles] : roles,
+				};
 			}
 		);
 		builder.addMatcher(isAnyOf(signinUser.rejected), (state, action) => {
