@@ -4,7 +4,7 @@ import { history } from "../..";
 import { PaginatedResponse } from "../models/pagination";
 import { store } from "../store/configureStore";
 
-const delay = () => new Promise((resolve) => setTimeout(resolve, 400));
+const delay = () => new Promise((resolve) => setTimeout(resolve, 500));
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 axios.defaults.withCredentials = true;
@@ -46,6 +46,8 @@ axios.interceptors.response.use(
 			case 401:
 				toast.error(data.title);
 				break;
+			case 403:
+
 			case 404:
 				toast.error(data.title);
 				break;
@@ -64,10 +66,39 @@ axios.interceptors.response.use(
 );
 
 const requests = {
-	get: (url: string, params?: URLSearchParams) => axios.get(url, { params }).then(responseBody),
+	get: (url: string, params?: URLSearchParams) =>
+		axios.get(url, { params }).then(responseBody),
 	post: (url: string, body: {}) => axios.post(url, body).then(responseBody),
 	put: (url: string, body: {}) => axios.put(url, body).then(responseBody),
 	delete: (url: string) => axios.delete(url).then(responseBody),
+	postForm: (url: string, data: FormData) =>
+		axios
+			.post(url, data, {
+				headers: { "Content-type": "multipart/form-data" },
+			})
+			.then(responseBody),
+	putForm: (url: string, data: FormData) =>
+		axios
+			.put(url, data, {
+				headers: { "Content-type": "multipart/form-data" },
+			})
+			.then(responseBody),
+};
+
+function setFormDataFormat(item: any) {
+	let formData = new FormData();
+	for (const key in item) {
+		formData.append(key, item[key]);
+	}
+	return formData;
+}
+
+const Admin = {
+	createProduct: (product: any) =>
+		requests.postForm("products", setFormDataFormat(product)),
+	updateProduct: (product: any) =>
+		requests.putForm("products", setFormDataFormat(product)),
+	deleteProduct: (id: number) => requests.delete(`products/${id}`),
 };
 
 const Catalog = {
@@ -116,6 +147,7 @@ const agent = {
 	Account,
 	Orders,
 	Payments,
+	Admin,
 };
 
 export default agent;
