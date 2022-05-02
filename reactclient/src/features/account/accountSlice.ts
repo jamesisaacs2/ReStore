@@ -61,8 +61,7 @@ export const accountSlice = createSlice({
 		},
 		setUser: (state, action) => {
 			let claim = JSON.parse(atob(action.payload.token.split(".")[1]));
-			let roles =
-				claim["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+			let roles = claim["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
 			state.user = {
 				...action.payload,
 				roles: typeof roles === "string" ? [roles] : roles,
@@ -80,8 +79,7 @@ export const accountSlice = createSlice({
 			isAnyOf(signinUser.fulfilled, fetchCurrentUser.fulfilled),
 			(state, action) => {
 				let claim = JSON.parse(atob(action.payload.token.split(".")[1]));
-				let roles =
-					claim["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+				let roles = claim["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
 				state.user = {
 					...action.payload,
 					roles: typeof roles === "string" ? [roles] : roles,
