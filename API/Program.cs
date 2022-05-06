@@ -1,24 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using API.Data;
-using API.Entities;
-using API.Entities.OrderAggregate;
-using API.RequestHelpers;
-using API.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container
@@ -125,39 +104,52 @@ builder.Services.AddScoped<PaymentService>();
 builder.Services.AddScoped<ImageService>();
 
 // Add middleware
+
 var app = builder.Build();
 
-// namespace API
-// {
-//    public class Program
-//    {
-//       public static async Task Main(string[] args)
-//       {
-//          var host = CreateHostBuilder(args).Build();
-//          using var scope = host.Services.CreateScope();
-//          var context = scope.ServiceProvider.GetRequiredService<StoreContext>();
-//          var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
-//          var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+app.UseMiddleware<ExceptionMiddleware>();
 
-//          try
-//          {
-//             await context.Database.MigrateAsync();
-//             await DbInitializer.Initialize(context, userManager);
-//          }
-//          catch (Exception ex)
-//          {
-//             logger.LogError(ex, "Problem migrating data");
-//          }
+if (builder.Environment.IsDevelopment())
+{
+   app.UseSwagger();
+   app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
+}
+else
+{
+   app.UseSwagger();
+   app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1.1/swagger.json", "API v1.1"));
+}
 
-//          await host.RunAsync();
-//       }
+app.UseDefaultFiles();
+app.UseStaticFiles();
 
-//       public static IHostBuilder CreateHostBuilder(string[] args) =>
-//           Host.CreateDefaultBuilder(args)
-//               .ConfigureWebHostDefaults(webBuilder =>
-//               {
-//                  webBuilder.UseStartup<Startup>();
-//               });
-//    }
-// }
+//CORS must go here:
+app.UseCors(opt =>
+{
+   opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:3000");
+});
 
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers();
+app.MapFallbackToController("Index", "fallback", "Fallback");
+
+using var scope = app.Services.CreateScope();
+var context = scope.ServiceProvider.GetRequiredService<StoreContext>();
+var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+
+try
+{
+   await context.Database.MigrateAsync();
+   await DbInitializer.Initialize(context, userManager);
+}
+catch (Exception ex)
+{
+   logger.LogError(ex, "Problem migrating data");
+}
+
+await app.RunAsync();
+
+//paused converting global usings to .net6 at Entities
